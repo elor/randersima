@@ -6,6 +6,7 @@
     <style>
       body {
       text-align: center;
+      overflow: hidden;
       }
 
       h1 {
@@ -139,7 +140,7 @@
 
       function showResult() {
         h1 = document.createElement('H1');
-        h1.innerText = asdecode(pickRecipient(arrayFromHash()));
+        h1.textContent = asdecode(pickRecipient(arrayFromHash()));
         document.body.appendChild(h1);
 
         window.setTimeout(fadeinResult, 200);
