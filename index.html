@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <title>ersi</title>
+    <style>
+      body {
+      text-align: center;
+      }
+
+      h1 {
+        position: relative;
+        font-size: 0%;
+        top: -10em;
+        text-align: center;
+        transition: all 1s;
+      }
+
+      h1.visible {
+        font-size: 300%;
+        top: 100px;
+      }
+
+      h1.highlight {
+        transform: rotate(360deg)
+      }
+
+      button {
+        -webkit-appearance: none;
+        -webkit-box-shadow: none;
+        -webkit-user-select: none;
+        -webkit-writing-mode: horizontal-tb;
+        align-items: flex-start;
+        background-color: rgb(96, 176, 68);
+        background-image: linear-gradient(rgb(138, 221, 109), rgb(96, 176, 68));
+        border-bottom-color: rgb(92, 169, 65);
+        border-bottom-left-radius: 0.25em;
+        border-bottom-right-radius: 0.25em;
+        border-bottom-style: solid;
+        border-bottom-width: 1px;
+        border-image-outset: 0px;
+        border-image-repeat: stretch;
+        border-image-slice: 100%;
+        border-image-source: none;
+        border-image-width: 1;
+        border-left-color: rgb(92, 169, 65);
+        border-left-style: solid;
+        border-left-width: 1px;
+        border-right-color: rgb(92, 169, 65);
+        border-right-style: solid;
+        border-right-width: 1px;
+        border-top-color: rgb(92, 169, 65);
+        border-top-left-radius: 0.25em;
+        border-top-right-radius: 0.25em;
+        border-top-style: solid;
+        border-top-width: 1px;
+        box-shadow: none;
+        box-sizing: border-box;
+        color: rgb(254, 254, 254);
+        cursor: default;
+        display: inline-block;
+        font-family: Helvetica, arial, nimbussansl, liberationsans, freesans, clean, sans-serif, 'Segoe UI Emoji', 'Segoe UI Symbol';
+        font-size: 200%;
+        font-stretch: normal;
+        font-style: normal;
+        font-variant: normal;
+        font-weight: bold;
+        height: 3em;
+        letter-spacing: normal;
+        line-height: 1.7em;
+        margin-bottom: 0px;
+        margin-left: 0px;
+        margin-right: 0px;
+        margin-top: 3em;
+        overflow-x: visible;
+        overflow-y: visible;
+        padding-bottom: 0.5em;
+        padding-left: 1em;
+        padding-right: 1em;
+        padding-top: 0.5em;
+        position: relative;
+        text-align: center;
+        text-indent: 0px;
+        text-rendering: auto;
+        text-shadow: rgba(0, 0, 0, 0.14902) 0px -1px 0px;
+        text-transform: none;
+        vertical-align: middle;
+        white-space: nowrap;
+        word-spacing: 0px;
+        word-wrap: break-word;
+        writing-mode: lr-tb;
+        transition: opacity 1s;
+        opacity: 1;
+      }
+
+      button.invisible {
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <button id="randomify">Wer ist heute dran?</button>
+    <script>
+      function asdecode(code) {
+        var source, i, j;
+        source = JSON.parse(atob(code)).slice(0);
+        source.unshift(source.length);
+        
+        for (i = source[0]; i > 0; i -= 1) {
+          for (j = i; j <= source[0]; j += 1) {
+            source[j] = source[j-1] + source[j];
+          }
+        }
+        source.shift();
+        return source.map(String.fromCharCode).join('');
+      }
+
+      function arrayFromHash(){
+        return window.location.hash.replace(/^#/,'').split('#');
+      }
+
+      function pickRecipient(choices){
+        return choices[Math.floor(Math.random()*choices.length)];
+      }
+
+      var button = document.getElementById('randomify');
+
+      function fadeoutButton() {
+        button.className = 'invisible';
+        window.setTimeout(hideButton, 1000);
+      }
+
+      function hideButton() {
+        button.parentNode.removeChild(button);
+        window.setTimeout(showResult, 500);
+      }
+
+      var h1;
+
+      function showResult() {
+        h1 = document.createElement('H1');
+        h1.innerText = asdecode(pickRecipient(arrayFromHash()));
+        document.body.appendChild(h1);
+
+        window.setTimeout(fadeinResult, 200);
+      }
+
+      function fadeinResult() {
+        h1.className = 'visible';
+
+        window.setTimeout(highlightResult, 1000);
+      }
+
+      function highlightResult(){
+        h1.className += ' highlight';
+
+        window.setTimeout(unhighlightResult, 1000);
+      }
+
+      function unhighlightResult(){
+        h1.className = h1.className.replace(/ highlight$/, '');
+      }
+
+      button.onclick = fadeoutButton;
+    </script>
+  </body>
+</html>
